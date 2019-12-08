@@ -1,0 +1,70 @@
+#include<bits/stdc++.h>
+#define ll long long
+#define inf 0x7fffffff
+using namespace std;
+int n;
+#define maxn 1000099
+int a[maxn],b[maxn],c[maxn],arr[maxn],cnt=0,fa[maxn];
+int Find(int x)
+{
+	if(x==fa[x])return x;
+	return fa[x]=Find(fa[x]);
+}
+bool ok()
+{
+	for(int i=1;i<=n;i++)
+	{
+		if(c[i]==1)
+		{
+			int fx=Find(a[i]);
+			int fy=Find(b[i]);
+			fa[fx]=fy;
+		}
+	}
+	for(int i=1;i<=n;i++)
+	{
+		if(c[i]==0)
+		{
+			int fx=Find(a[i]);
+			int fy=Find(b[i]);
+			if(fx==fy)return false;
+		}
+	}
+	return true;
+}
+signed main()
+{
+	int T;
+	scanf("%d",&T);
+	while(T--)
+	{
+		scanf("%d",&n);
+		cnt=0;
+		memset(a,0,sizeof(a));
+		memset(b,0,sizeof(b));
+		memset(c,0,sizeof(c));
+		memset(fa,0,sizeof(fa));
+		for(int i=1;i<=n;i++)
+		{
+			scanf("%d%d%d",&a[i],&b[i],&c[i]);
+			arr[++cnt]=a[i];
+			arr[++cnt]=b[i];
+		}
+		sort(arr+1,arr+1+cnt);
+		int len=unique(arr+1,arr+1+cnt)-arr;
+		for(int i=1;i<=n;i++)
+		{
+			a[i]=lower_bound(arr+1,arr+1+len,a[i])-arr;
+			b[i]=lower_bound(arr+1,arr+1+len,b[i])-arr;
+		}
+		for(int i=0;i<=len;i++)fa[i]=i;
+		if(ok())
+		{
+			printf("YES\n");
+		}else
+		{
+			printf("NO\n");
+		}
+	}
+	return 0;
+}
